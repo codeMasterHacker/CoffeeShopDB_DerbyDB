@@ -1,14 +1,5 @@
 import java.sql.*;
 
-/**
- * @author John J. Couture
- * @version 1.01 - 04/07/2014
- * @email jcouture@sdccd.edu
- * @prgm.usage Called as an object to create a Derby database
- * @assignment.number A19002
- * @see <a href='http://faculty.sdmiramar.edu/jcouture/2014sp/cisc190/webct/manual/a190-10.asp'>Program Specification</a>
- * @see <br><a href='http://docs.oracle.com/javase/7/docs/technotes/tools/solaris/javadoc.html'>Javadoc Documentation</a>
- */
 public class CreateCoffeeDB
 {
    public static void main(String[] args)
@@ -21,8 +12,7 @@ public class CreateCoffeeDB
          final String DB_URL = "jdbc:derby:CoffeeDB;create=true";
 
          // Create a connection to the database.
-         Connection conn =
-            DriverManager.getConnection(DB_URL);
+         Connection conn = DriverManager.getConnection(DB_URL);
 
          // If the DB already exists, drop the tables.
          dropTables(conn);
@@ -30,16 +20,10 @@ public class CreateCoffeeDB
          // Build the Coffee table.
          buildCoffeeTable(conn);
 
-         // Build the Customer table.
-         // buildCustomerTable(conn);
-
-         // Build the UnpaidInvoice table.
-         // buildUnpaidOrderTable(conn);
-
          // Close the connection.
          conn.close();
-         // DriverManager.getConnection("jdbc:derby:;shutdown=true");
-      } catch (Exception e)
+      } 
+      catch (Exception e)
       {
          System.out.println("Error Creating the Coffee Table");
          System.out.println(e.getMessage());
@@ -59,44 +43,12 @@ public class CreateCoffeeDB
       {
          // Get a Statement object.
          Statement stmt = conn.createStatement();
-
-         try
-         {
-            // Drop the UnpaidOrder table.
-            stmt.execute("DROP TABLE Unpaidorder");
-            System.out.println("UnpaidOrder table dropped.");
-         } catch (SQLException ex)
-         {
-            // No need to report an error.
-            // The table simply did not exist.
-         }
-
-         try
-         {
-            // Drop the Customer table.
-            stmt.execute("DROP TABLE Customer");
-            System.out.println("Customer table dropped.");
-         } catch (SQLException ex)
-         {
-            // No need to report an error.
-            // The table simply did not exist.
-         }
-
-         try
-         {
-            // Drop the Coffee table.
-            stmt.execute("DROP TABLE Coffee");
-            System.out.println("Coffee table dropped.");
-         } catch (SQLException ex)
-         {
-            // No need to report an error.
-            // The table simply did not exist.
-         }
-      } catch (SQLException ex)
-      {
-         System.out.println("ERROR: " + ex.getMessage());
-         ex.printStackTrace();
-      }
+         
+         // Drop the Coffee table.
+         stmt.execute("DROP TABLE Coffee");
+         System.out.println("Coffee table dropped.");
+      } 
+      catch (SQLException ex) {}
    }
 
    /**
@@ -117,7 +69,7 @@ public class CreateCoffeeDB
             "Price DOUBLE " +
             ")");
 
-         // Insert row #1.
+         // Insert row #0.
          stmt.execute("INSERT INTO Coffee VALUES ( " +
             "'Bolivian Dark', " +
             "'14-001', " +
@@ -226,75 +178,8 @@ public class CreateCoffeeDB
             "9.95 )");
 
          System.out.println("Coffee table created.");
-      } catch (SQLException ex)
-      {
-         System.out.println("ERROR: " + ex.getMessage());
-      }
-   }
-
-   /**
-    * The buildCustomerTable method creates the
-    * Customer table and adds some rows to it.
-    */
-   public static void buildCustomerTable(Connection conn)
-   {
-      try
-      {
-         // Get a Statement object.
-         Statement stmt = conn.createStatement();
-
-         // Create the table.
-         stmt.execute("CREATE TABLE Customer" +
-            "( CustomerNumber CHAR(10) NOT NULL PRIMARY KEY, " +
-            "  Name CHAR(25)," +
-            "  Address CHAR(25)," +
-            "  City CHAR(12)," +
-            "  State CHAR(2)," +
-            "  Zip CHAR(5) )");
-
-         // Add some rows to the new table.
-         stmt.executeUpdate("INSERT INTO Customer VALUES" +
-            "('101', 'Downtown Cafe', '17 N. Main Street'," +
-            " 'Asheville', 'NC', '55515')");
-
-         stmt.executeUpdate("INSERT INTO Customer VALUES" +
-            "('102', 'Main Street Grocery'," +
-            " '110 E. Main Street'," +
-            " 'Canton', 'NC', '55555')");
-
-         stmt.executeUpdate("INSERT INTO Customer VALUES" +
-            "('103', 'The Coffee Place', '101 Center Plaza'," +
-            " 'Waynesville', 'NC', '55516')");
-
-         System.out.println("Customer table created.");
-      } catch (SQLException ex)
-      {
-         System.out.println("ERROR: " + ex.getMessage());
-      }
-   }
-
-   /**
-    * The buildUnpaidOrderTable method creates
-    * the UnpaidOrder table.
-    */
-
-   public static void buildUnpaidOrderTable(Connection conn)
-   {
-      try
-      {
-         // Get a Statement object.
-         Statement stmt = conn.createStatement();
-
-         // Create the table.
-         stmt.execute("CREATE TABLE UnpaidOrder " +
-            "( CustomerNumber CHAR(10) NOT NULL REFERENCES Customer(CustomerNumber), " +
-            "  ProdNum CHAR(10) NOT NULL REFERENCES Coffee(ProdNum)," +
-            "  OrderDate CHAR(10)," +
-            "  Quantity DOUBLE," +
-            "  Cost DOUBLE )");
-
-         System.out.println("UnpaidOrder table created.");
-      } catch (SQLException ex)
+      } 
+      catch (SQLException ex)
       {
          System.out.println("ERROR: " + ex.getMessage());
       }
